@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-const Movies = () => {
-  const [movies, setMovies] = useState([])
+const Genres = ({ setGenre }) => {
+  const [genres, setGenres] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetch("http://localhost:4000/v1/movies")
-      // .then((res) => res.json())
+    fetch("http://localhost:4000/v1/genres")
       .then((response) => {
         if (response.status !== 200) {
           setError(response.status)
         }
-        return response.json();
+        return response.json()
       })
       .then((json) => {
-        setMovies(json.movies)
+        setGenres(json.genres)
         setIsLoaded(true)
       },
       (_) => {
@@ -29,17 +28,17 @@ const Movies = () => {
   } else if (!isLoaded) {
     return <p>Loading...</p>
   }
-  
+
   return (
     <>
-      <h2>Choose a movie</h2>
+      <h2>Genres</h2>
       <div className="list-group">
-        {movies.map((movie) => (
-          <Link key={movie.id} to={`/movies/${movie.id}`} className="list-group-item list-group-item-action">{movie.title}</Link>
+        {genres.map((m) => (
+          <Link key={m.id} to={`/genre/${m.id}`} onClick={() => setGenre(m.genre_name)} className="list-group-item list-group-item-action">{m.genre_name}</Link>
         ))}
       </div>
     </>
   )
 }
 
-export default Movies
+export default Genres

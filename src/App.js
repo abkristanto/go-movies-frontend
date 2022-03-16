@@ -1,8 +1,10 @@
-import React, { Fragment } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
-import { Movies, Home, Admin, Movie, CategoryPage } from './components';
+import { Movies, Home, Admin, Movie, Genres, OneGenre, EditMovie } from './components';
 
 const App = () => {
+  const [genre, setGenre] = useState("")
+  console.log(genre)
   return (
     <Router>
       <div className="container">
@@ -23,7 +25,10 @@ const App = () => {
                   <Link to="/movies">Movies</Link>
                 </li>
                 <li className="list-group-item">
-                  <Link to="/by-category">Categories</Link>
+                  <Link to="/genres">Genres</Link>
+                </li>
+                <li className="list-group-item">
+                  <Link to="/admin/add">Add Movie</Link>
                 </li>
                 <li className="list-group-item">
                   <Link to="/admin">Manage Catalogue</Link>
@@ -39,8 +44,14 @@ const App = () => {
               <Route path="/movies">
                 <Movies />
               </Route>
-              <Route exact path="/by-category">
-                <CategoryPage />
+              <Route path="/genre/:id">
+                <OneGenre genre={genre}/>
+              </Route>
+              <Route exact path="/genres">
+                <Genres setGenre={setGenre}/>
+              </Route>
+              <Route path="/admin/add">
+                <EditMovie />
               </Route>
               <Route path="/admin">
                 <Admin />
