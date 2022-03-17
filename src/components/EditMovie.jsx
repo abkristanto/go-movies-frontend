@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import Input from './Input';
+import TextArea from './TextArea';
+import Select from './Select';
 
 const EditMovie = () => {
   const [movie, setMovie] = useState({})
@@ -11,6 +14,20 @@ const EditMovie = () => {
       [e.target.name]: e.target.value
     })
   }
+
+  const handleSubmit = (e) => {
+    console.log("Form was submitted")
+    e.preventDefault()
+  }
+
+  const mpaaOptions = [
+    {id: "G", value: "G"},
+    {id: "PG", value: "PG"},
+    {id: "PG13", value: "PG-13"},
+    {id: "R", value: "R"},
+    {id: "NC17", value: "NC17"},
+  ]
+  
   console.log(movie)
   
 
@@ -18,86 +35,61 @@ const EditMovie = () => {
     <>
       <h2>Add/Edit Movie</h2>
       <hr />
-      <form method="post">
-        <div className="mb-3">
-          <label for="title" className="form-label">
-            Title
-          </label>
-          <input 
-            type="text"
-            className="form-control"
-            id="title"
-            name="title"
-            value={movie.title}
-            onChange={handleChange}
-            />
-        </div>
-        <div className="mb-3">
-          <label for="release_date" className="form-label">
-            Release Date
-          </label>
-          <input 
-            type="text"
-            className="form-control"
-            id="release_date"
-            name="release_date"
-            value={movie.release_date}
-            onChange={handleChange}
-            />
-        </div>
-        <div className="mb-3">
-          <label for="runtime" className="form-label">
-            Runtime
-          </label>
-          <input 
-            type="text"
-            className="form-control"
-            id="runtime"
-            name="runtime"
-            value={movie.runtime}
-            onChange={handleChange}
-            />
-        </div>
-        <div className="mb-3">
-          <label for="mpaa_rating" className="form-label">
-            MPAA Rating
-          </label>
-          <select 
-            className="form-select"
-            value={movie.mpaa_rating} 
-            name="mpaa_rating"
-            onChange={handleChange}  
-            placeholder="Choose..."       
-          >
-            <option className="form-select">Choose</option>
-            <option className="form-select" value="G">G</option>
-            <option className="form-select" value="PG">PG</option>
-            <option className="form-select" value="PG13">PG13</option>
-            <option className="form-select" value="R">R</option>
-            <option className="form-select" value="NC17">NC17</option>
-          </select>
-        </div>
-        <div className="mb-3">
-          <label for="rating" className="form-label">
-            Rating
-          </label>
-          <input 
-            type="text"
-            className="form-control"
-            id="rating"
-            name="rating"
-            value={movie.rating}
-            onChange={handleChange}
-            />
-        </div>
-        <div className="mb-3">
-          <label for="description" className="form-label">
-            Description
-          </label>
-          <textarea className="form-control" id="description" name="description" rows="3" onChange={handleChange}>
-            {movie.description}
-          </textarea>
-        </div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="hidden"
+          name="id"
+          id="id"
+          value={movie.id}
+          onChange={handleChange}
+          />
+        <Input
+          type="text"
+          name="title"
+          title="Title"
+          value={movie.title}
+          handleChange={handleChange}
+          placeholder="Title"
+        />
+        <Input
+          type="text"
+          name="release_date"
+          title="Release Date"
+          value={movie.release_date}
+          handleChange={handleChange}
+          placeholder="Release Date"
+        />
+        <Input
+          type="text"
+          name="runtime"
+          title="Runtime"
+          value={movie.runtime}
+          handleChange={handleChange}
+          placeholder="Runtime"
+        />
+        <Select 
+          title="MPAA Rating"
+          name="mpaa_rating"
+          options={mpaaOptions}
+          value={movie.mpaa_rating}
+          handleChange={handleChange}
+          placeholder="Choose..."
+        />
+        <Input
+          type="text"
+          name="rating"
+          title="Rating"
+          value={movie.rating}
+          handleChange={handleChange}
+          placeholder="Rating"
+        />
+        <TextArea
+          name="description"
+          title="Description"
+          value={movie.description}
+          handleChange={handleChange} 
+          placeholder="Description"
+        />
         <hr />
 
         <button className="btn btn-primary">Save</button>
