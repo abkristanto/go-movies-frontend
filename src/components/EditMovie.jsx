@@ -5,7 +5,15 @@ import TextArea from './TextArea';
 import Select from './Select';
 
 const EditMovie = () => {
-  const [movie, setMovie] = useState({})
+  const [movie, setMovie] = useState({
+    id: 0,
+    title: "",
+    release_date: "",
+    runtime: "",
+    mpaa_rating: "",
+    rating: "",
+    description: "",
+  })
   const [isLoaded, setIsLoaded] = useState(false)
   const [error, setError] = useState(null)
   let { id } = useParams();
@@ -51,6 +59,12 @@ const EditMovie = () => {
   const handleSubmit = (e) => {
     console.log("Form was submitted")
     e.preventDefault()
+
+    // client side validation
+    let errors = [];
+    if (movie.title === "") {
+      errors.push("title")
+    }
 
     const data = new FormData(e.target)
     const payload = Object.fromEntries(data.entries())
@@ -103,7 +117,7 @@ const EditMovie = () => {
           placeholder="Title"
         />
         <Input
-          type="text"
+          type="date"
           name="release_date"
           title="Release Date"
           value={movie.release_date}
