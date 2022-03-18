@@ -1,12 +1,45 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import Input from './Input';
 import TextArea from './TextArea';
 import Select from './Select';
 
 const EditMovie = () => {
   const [movie, setMovie] = useState({})
-  const [isloaded, setIsloaded] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
   const [error, setError] = useState(null)
+  let { id } = useParams();
+
+  useEffect(() => {
+    if (id > 0) {
+      fetch(`http://localhost:4000/v1/movie/${id}`)
+        .then((response) => {
+          if (response.status !== 200) {
+            setError(response.status)
+          }
+          return response.json()
+        })
+        .then((json) => {
+          const releaseDate = new Date(json.movie.release_date)
+          setMovie({
+            id: id,
+            title: json.movie.title,
+            release_date: releaseDate.toISOString().split("T")[0],
+            runtime: json.movie.runtime,
+            mpaa_rating: json.movie.mpaa_rating,
+            rating: json.movie.rating,
+            description: json.movie.description,
+          })
+          setIsLoaded(true)
+        },
+        (_) => {
+          setIsLoaded(true)
+        })
+    } else {
+      setIsLoaded(true)
+    }
+  }, [])
+  
 
   const handleChange = (e) => {
     setMovie({
@@ -18,6 +51,21 @@ const EditMovie = () => {
   const handleSubmit = (e) => {
     console.log("Form was submitted")
     e.preventDefault()
+
+    const data = new FormData(e.target)
+    const payload = Object.fromEntries(data.entries())
+    console.log(payload)
+
+    const requestOptions = {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }
+
+    fetch("http://localhost:4000/v1/admin/editmovie", requestOptions)
+      .then((response) => response.json())
+      .then(data => {
+        console.log(data)
+      })
   }
 
   const mpaaOptions = [
@@ -27,10 +75,13 @@ const EditMovie = () => {
     {id: "R", value: "R"},
     {id: "NC17", value: "NC17"},
   ]
-  
-  console.log(movie)
-  
 
+  if (error) {
+    return <div>Erorr: Invalid endpoint {error}</div>
+  } else if (!isLoaded) {
+    return <p>Loading...</p>
+  }
+  
   return (
     <>
       <h2>Add/Edit Movie</h2>

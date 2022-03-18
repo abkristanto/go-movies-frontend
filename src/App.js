@@ -28,7 +28,7 @@ const App = () => {
                   <Link to="/genres">Genres</Link>
                 </li>
                 <li className="list-group-item">
-                  <Link to="/admin/add">Add Movie</Link>
+                  <Link to="/admin/movie/0">Add Movie</Link>
                 </li>
                 <li className="list-group-item">
                   <Link to="/admin">Manage Catalogue</Link>
@@ -50,7 +50,7 @@ const App = () => {
               <Route exact path="/genres">
                 <Genres setGenre={setGenre}/>
               </Route>
-              <Route path="/admin/add">
+              <Route path="/admin/movie/:id">
                 <EditMovie />
               </Route>
               <Route path="/admin">
